@@ -52,6 +52,8 @@
     <Compile Include="Dash.Designer.cs">
       <DependentUpon>Dash.cs</DependentUpon>
     </Compile>
+    <Compile Include="GA.cs" />
+    <Compile Include="IGenome.cs" />
     <Compile Include="Living.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Program.cs" />

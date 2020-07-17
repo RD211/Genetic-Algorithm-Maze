@@ -44,16 +44,18 @@
             // 
             this.lbl_best.AutoSize = true;
             this.lbl_best.Font = new System.Drawing.Font("NeoSans", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_best.Location = new System.Drawing.Point(12, 415);
+            this.lbl_best.Location = new System.Drawing.Point(16, 511);
+            this.lbl_best.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_best.Name = "lbl_best";
-            this.lbl_best.Size = new System.Drawing.Size(0, 21);
+            this.lbl_best.Size = new System.Drawing.Size(0, 27);
             this.lbl_best.TabIndex = 1;
             // 
             // pbox_map
             // 
-            this.pbox_map.Location = new System.Drawing.Point(12, 12);
+            this.pbox_map.Location = new System.Drawing.Point(16, 15);
+            this.pbox_map.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pbox_map.Name = "pbox_map";
-            this.pbox_map.Size = new System.Drawing.Size(400, 400);
+            this.pbox_map.Size = new System.Drawing.Size(533, 492);
             this.pbox_map.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbox_map.TabIndex = 2;
             this.pbox_map.TabStop = false;
@@ -61,9 +63,10 @@
             // 
             // btn_start
             // 
-            this.btn_start.Location = new System.Drawing.Point(418, 360);
+            this.btn_start.Location = new System.Drawing.Point(557, 443);
+            this.btn_start.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_start.Name = "btn_start";
-            this.btn_start.Size = new System.Drawing.Size(67, 52);
+            this.btn_start.Size = new System.Drawing.Size(89, 64);
             this.btn_start.TabIndex = 3;
             this.btn_start.Text = "Start";
             this.btn_start.UseVisualStyleBackColor = true;
@@ -72,9 +75,10 @@
             // btn_bomb
             // 
             this.btn_bomb.BackColor = System.Drawing.Color.Red;
-            this.btn_bomb.Location = new System.Drawing.Point(418, 12);
+            this.btn_bomb.Location = new System.Drawing.Point(557, 15);
+            this.btn_bomb.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_bomb.Name = "btn_bomb";
-            this.btn_bomb.Size = new System.Drawing.Size(67, 52);
+            this.btn_bomb.Size = new System.Drawing.Size(89, 64);
             this.btn_bomb.TabIndex = 4;
             this.btn_bomb.Text = "Bomb";
             this.btn_bomb.UseVisualStyleBackColor = false;
@@ -83,9 +87,10 @@
             // btn_coin
             // 
             this.btn_coin.BackColor = System.Drawing.Color.Yellow;
-            this.btn_coin.Location = new System.Drawing.Point(418, 70);
+            this.btn_coin.Location = new System.Drawing.Point(557, 86);
+            this.btn_coin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_coin.Name = "btn_coin";
-            this.btn_coin.Size = new System.Drawing.Size(67, 52);
+            this.btn_coin.Size = new System.Drawing.Size(89, 64);
             this.btn_coin.TabIndex = 5;
             this.btn_coin.Text = "Coin";
             this.btn_coin.UseVisualStyleBackColor = false;
@@ -94,9 +99,10 @@
             // btn_wall
             // 
             this.btn_wall.BackColor = System.Drawing.Color.Gray;
-            this.btn_wall.Location = new System.Drawing.Point(418, 128);
+            this.btn_wall.Location = new System.Drawing.Point(557, 158);
+            this.btn_wall.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_wall.Name = "btn_wall";
-            this.btn_wall.Size = new System.Drawing.Size(67, 52);
+            this.btn_wall.Size = new System.Drawing.Size(89, 64);
             this.btn_wall.TabIndex = 6;
             this.btn_wall.Text = "Wall";
             this.btn_wall.UseVisualStyleBackColor = false;
@@ -105,9 +111,10 @@
             // btn_empty
             // 
             this.btn_empty.BackColor = System.Drawing.Color.White;
-            this.btn_empty.Location = new System.Drawing.Point(418, 186);
+            this.btn_empty.Location = new System.Drawing.Point(557, 229);
+            this.btn_empty.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_empty.Name = "btn_empty";
-            this.btn_empty.Size = new System.Drawing.Size(67, 52);
+            this.btn_empty.Size = new System.Drawing.Size(89, 64);
             this.btn_empty.TabIndex = 7;
             this.btn_empty.Text = "Empty";
             this.btn_empty.UseVisualStyleBackColor = false;
@@ -115,14 +122,14 @@
             // 
             // timer
             // 
-            this.timer.Interval = 50;
+            this.timer.Interval = 2;
             this.timer.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // frm_dash
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(497, 468);
+            this.ClientSize = new System.Drawing.Size(663, 576);
             this.Controls.Add(this.btn_empty);
             this.Controls.Add(this.btn_wall);
             this.Controls.Add(this.btn_coin);
@@ -131,6 +138,7 @@
             this.Controls.Add(this.pbox_map);
             this.Controls.Add(this.lbl_best);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frm_dash";
             this.Text = "GA";
             this.Load += new System.EventHandler(this.Frm_dash_Load);

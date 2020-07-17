@@ -1,48 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using static GA.Map;
 
 namespace GA
 {
-    public class Living
+    public class Living : IGenome
     {
         public List<Map.MovementType> chromosome;
-        public int fitness;
+        public double? fitness=null;
         public Living(List<Map.MovementType> chromosome)
         {
             this.chromosome = chromosome;
-            fitness = Map.Score(chromosome);
+            fitness = Measure();
         }
 
-        public Living Mate(Living par2)
+        public double Measure()
         {
-            List<Map.MovementType> child_chromosome = new List<Map.MovementType>();
-            int newSize = Map.rnd.Next(Math.Min(chromosome.Count(), par2.chromosome.Count()), Math.Max(chromosome.Count(), par2.chromosome.Count()));
-            if (Map.rnd.Next(0, 15) == 5)
+            if (fitness != null)
+                return (double)fitness;
+            
+            Point pos = new Point(0, 0);
+            bool[,] was = new bool[Map.mapSize, Map.mapSize];
+            double fitnessLocal = 0;
+            chromosome.ForEach((c) =>
             {
-                newSize = Map.rnd.Next(0, 100);
-                for (int i = 0; i < newSize; i++)
+                Point copyPos = pos;
+                switch (c)
                 {
-                    child_chromosome.Add(Map.MutateGene());
+                    case MovementType.Left:
+                        if (copyPos.X - 1 >= 0)
+                            copyPos.X--;
+                        break;
+                    case MovementType.Right:
+                        if (copyPos.X + 1 < mapSize)
+                            copyPos.X++;
+                        break;
+                    case MovementType.Up:
+                        if (copyPos.Y - 1 >= 0)
+                            copyPos.Y--;
+                        break;
+                    case MovementType.Down:
+                        if (copyPos.Y + 1 < mapSize)
+                            copyPos.Y++;
+                        break;
                 }
-            }
-            else
-            {
-                for (int i = 0; i < newSize; i++)
+                switch (harta[copyPos.X, copyPos.Y])
                 {
-                    float probability = (float)Map.rnd.Next(0, 100) / 100;
-                    if (probability < 0.40 && i < chromosome.Count())
-                        child_chromosome.Add(chromosome[i]);
-                    else if (probability < 0.80 && i < par2.chromosome.Count())
-                        child_chromosome.Add(par2.chromosome[i]);
-                    else if (probability < 0.95)
-                        child_chromosome.Add(Map.MutateGene());
+                    case CellType.Bomb:
+                        if (!was[copyPos.X, copyPos.Y])
+                            fitnessLocal -= 5;
+                        pos = copyPos;
+                        break;
+                    case CellType.Coin:
+                        if (!was[copyPos.X, copyPos.Y])
+                            fitnessLocal += 5;
+                        pos = copyPos;
+                        break;
+                    case CellType.Empty:
+                        if (!was[copyPos.X, copyPos.Y])
+                            fitnessLocal += 2;
+                        pos = copyPos;
+                        break;
                 }
-
-
-            }
-            return new Living(child_chromosome);
-
+                was[pos.X, pos.Y] = true;
+            });
+            this.fitness = fitnessLocal;
+            return (double)fitness;
         }
     }
 }

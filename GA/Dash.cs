@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GA
@@ -13,13 +9,40 @@ namespace GA
 
     public partial class frm_dash : Form
     {
-        static int populationSize = 5000;
         int generationCounter = 0;
-        List<Living> population = new List<Living>();
         Map.CellType selectedCellType = Map.CellType.Empty;
+        GA<Living> solution;
         public frm_dash()
         {
             InitializeComponent();
+            solution = new GA<Living>(100, Mate, () => new Living(Map.GenerateGnome()));
+        }
+        private Living Mate(Living a, Living b)
+        {
+            List<Map.MovementType> child_chromosome = new List<Map.MovementType>();
+            int newSize = Map.rnd.Next(Math.Min(a.chromosome.Count(), b.chromosome.Count()), Math.Max(a.chromosome.Count(), b.chromosome.Count()));
+            if (Map.rnd.Next(0, 15) == 5)
+            {
+                newSize = Map.rnd.Next(0, 100);
+                for (int i = 0; i < newSize; i++)
+                {
+                    child_chromosome.Add(Map.MutateGene());
+                }
+            }
+            else
+            {
+                for (int i = 0; i < newSize; i++)
+                {
+                    float probability = (float)Map.rnd.Next(0, 100) / 100;
+                    if (probability < 0.40 && i < a.chromosome.Count())
+                        child_chromosome.Add(a.chromosome[i]);
+                    else if (probability < 0.80 && i < b.chromosome.Count())
+                        child_chromosome.Add(b.chromosome[i]);
+                    else if (probability < 0.95)
+                        child_chromosome.Add(Map.MutateGene());
+                }
+            }
+            return new Living(child_chromosome);
         }
 
         private void Frm_dash_Load(object sender, EventArgs e)
@@ -56,7 +79,7 @@ namespace GA
             }
             if(drawBest)
             {
-                var best = population[0];
+                var best = solution.GetBestContender();
                 Point pos = new Point(0, 0);
                 for(int i = 0;i<best.chromosome.Count();i++)
                 {
@@ -98,11 +121,6 @@ namespace GA
         {
             if (btn_start.Text == "Start")
             {
-                for (int i = 0; i < populationSize; i++)
-                {
-                    population.Add(new Living(Map.GenerateGnome()));
-                }
-
                 this.btn_start.Text = "Stop";
                 timer.Start();
             }
@@ -110,7 +128,7 @@ namespace GA
             {
                 timer.Stop();
                 this.btn_start.Text = "Start";
-                population.Clear();
+                solution.ResetPopulation();
                 this.generationCounter = 0;
             }
         }
@@ -118,9 +136,7 @@ namespace GA
         private void PictureBox1_Click(object sender, EventArgs e)
         {
             Point pointOfClick = ((MouseEventArgs)e).Location;
-            pointOfClick.X /= 4;
-            pointOfClick.Y /= 4;
-            Map.harta[pointOfClick.X / 10, pointOfClick.Y / 10] = selectedCellType;
+            Map.harta[pointOfClick.X / (pbox_map.Width /Map.mapSize), pointOfClick.Y / (pbox_map.Height/ Map.mapSize)] = selectedCellType;
             DrawMap();
         }
 
@@ -145,29 +161,14 @@ namespace GA
         {
             this.selectedCellType = Map.CellType.Empty;
 
-        }
+        } 
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            var orderedPopulation = population.OrderBy(live => live.fitness).Reverse().ToList();
-            List<Living> newGen = new List<Living>();
-            for (int i = 0; i < (10*populationSize) / 100; i++)
-            {
-                newGen.Add(orderedPopulation[i]);
-            }
-            for (int i = 0; i < (90 * populationSize) / 100; i++)
-            {
-                int r = Map.rnd.Next(0, populationSize / 2);
-                Living parent1 = orderedPopulation[r];
-                r = Map.rnd.Next(0, populationSize / 2);
-                Living parent2 = orderedPopulation[r];
-                Living offspring = parent1.Mate(parent2);
-                newGen.Add(offspring);
-            }
-            population = new List<Living>(newGen);
-            this.lbl_best.Text = "Best score: "+population[0].fitness + " \nGeneration number: " + generationCounter++;
-            if(generationCounter%2==0)
-            DrawMap(true);
+            solution.Eval();
+            this.lbl_best.Text = "Best score: "+solution.GetBestContender().fitness + " \nGeneration number: " + generationCounter++;
+            if(generationCounter%10==0)
+                DrawMap(true);
         }
     }
 }
